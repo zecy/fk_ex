@@ -50,20 +50,21 @@ let main = () => {
 
         for (let i = 0; i < pageA.length; i++) {
             let link;
+
             $.ajax({
-                type: "GET",
-                url: pageA[i].href,
-                dataType: "html",
-                async: false,
-                success: (data) => {
+                    type: "GET",
+                    url: pageA[i].href,
+                    dataType: "html",
+                    async: false,
+                })
+                .done((data) => {
                     link = $(data).find('#img').attr('src');
                     links.push(link);
-                },
-                error: () => {
+                })
+                .fail(() => {
                     link = '第 ' + (i + 1) + ' 张图出错;错误地址：' + url;
                     links.push(link);
-                }
-            })
+                });
         }
         return links.length > 0 ? links.join('<br>\n') : '<h1>获取失败</h1>';
     }
