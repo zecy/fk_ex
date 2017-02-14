@@ -70,14 +70,24 @@ let main = () => {
     }
 
     // 设置文本框
-    let setTextBox = (text) => {
+    let setTextBox = (list, name) => {
+
+
         if (!document.getElementById('result-box')) {
             let box = document.createElement('div');
+
+            const html = `
+                <div id="list-box"></div>
+                <div id="name-box"></div>
+            `;
+
             box.setAttribute("contentEditable", true);
             box.id = "result-box";
+            box.innerHTML = html;
             $('#gdt').before(box);
         }
-        $('#result-box').html(text);
+        $('#list-box').html(list);
+        $('#name-box').html(name);
     }
 
     const setStyle = () => {
@@ -100,12 +110,22 @@ let main = () => {
             
             #result-box {
                 min-width: 720px;
-                max-width: 1200px;
+                max-width: 1212px;
+                margin: 0 auto 5px auto;
+                display:flex;
+            }
+
+            #result-box > div {
                 border: 1px solid #000;
                 padding: 5px;
                 background: #4f535b;
                 text-align: center;
-                margin: 0 auto 5px auto
+                box-sizing:border-box;
+                flex:0 0 600px;
+            }
+
+            #result-box > div:first-child {
+                margin-right: 12px;
             }
 
             /* loading animation */
