@@ -17,14 +17,14 @@ let main = () => {
     // 主要操作逻辑
     let mainTask = () => {
 
-        $.when(setTextBox(loading()))
-            .then(() => {
-                // 1. 获取链接
-                return getImgLinks();
-            }).then((r) => {
-                // 2. 正文文字插入到一个 div 中，等待复制
-                setTextBox(r);
-            })
+        $.when(setLoading()).then(() => {
+            // 1. 获取链接
+            return getImgLinks();
+        }).then((r) => {
+            // 2. 正文文字插入到一个 div 中，等待复制
+            removeLoading();
+            setTextBox(r, 'name');
+        })
     }
 
     // 设置按钮
