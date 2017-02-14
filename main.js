@@ -11,20 +11,27 @@ let main = () => {
         $('#list-btn').click(function() {
             mainTask();
         });
-
     });
 
     // 主要操作逻辑
     let mainTask = () => {
 
-        $.when(setLoading()).then(() => {
-            // 1. 获取链接
-            return getImgLinks();
-        }).then((r) => {
-            // 2. 正文文字插入到一个 div 中，等待复制
-            removeLoading();
-            setTextBox(r, 'name');
-        })
+        $.when(setLoading())
+            .then(() => {
+                // 1. 获取链接和名字
+                /**
+                 * {
+                 *     'links': links,
+                 *     'names': names
+                 * }
+                 */
+                return getImages();
+            })
+            .done((imgs) => {
+                // 2. 正文文字插入到一个 div 中，等待复制
+                removeLoading();
+                setTextBox(imgs.links, imgs.names);
+            })
     }
 
     // 设置按钮
@@ -83,10 +90,10 @@ let main = () => {
                 <div id="name-box"></div>
             `;
 
-            box.setAttribute("contentEditable", true);
             box.id = "result-box";
             box.innerHTML = html;
             $('#gdt').before(box);
+            $('#list-box, #name-box').attr("contentEditable", true);
         }
         $('#list-box').html(list);
         $('#name-box').html(name);
