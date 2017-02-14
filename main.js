@@ -73,6 +73,9 @@ let main = () => {
                 console.log(link);
                 links.push(link);
             });
+        return {
+            'links': links.length > 0 ? links.join('<br>\n') : '<h1>获取失败</h1>',
+            'names': names.length > 0 ? names.join('<br>\n') : '<h1>获取失败</h1>'
         }
         console.log('links: ' + links);
         return links.length > 0 ? links.join('<br>\n') : '<h1>获取失败</h1>';
