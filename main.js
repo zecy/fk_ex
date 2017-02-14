@@ -121,10 +121,22 @@ let main = () => {
             }
             
             #result-box {
-                min-width: 720px;
+                min-width: 732px;
                 max-width: 1212px;
                 margin: 0 auto 5px auto;
                 display:flex;
+            }
+
+            @media screen and (max-width: 1230px) {
+                div#result-box {
+                    max-width: 972px;
+                }
+            }
+
+            @media screen and (max-width: 990px) {
+                div#result-box {
+                    max-width: 732px;
+                }
             }
 
             #result-box > div {
@@ -132,8 +144,10 @@ let main = () => {
                 padding: 5px;
                 background: #4f535b;
                 text-align: center;
-                box-sizing:border-box;
-                flex:0 0 calc(50% - 6px);
+                box-sizing: border-box;
+                width: calc(50% - 6px);
+                flex-grow: 0;
+                flex-shrink: 0;
             }
 
             #result-box > div:first-child {
