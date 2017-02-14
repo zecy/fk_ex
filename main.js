@@ -50,22 +50,24 @@ let main = () => {
 
         for (let i = 0; i < pageA.length; i++) {
             let link;
-
             $.ajax({
-                    type: "GET",
-                    url: pageA[i].href,
-                    dataType: "html",
-                    async: false,
-                })
-                .done((data) => {
-                    link = $(data).find('#img').attr('src');
-                    links.push(link);
-                })
-                .fail(() => {
-                    link = '第 ' + (i + 1) + ' 张图出错;错误地址：' + url;
-                    links.push(link);
-                });
+                type: "GET",
+                url: pageA[i].href,
+                dataType: "html",
+                async: true,
+            }).done((data) => {
+                console.log('成功获取链接');
+                link = $(data).find('#img').attr('src');
+                console.log('link: ' + link);
+                links.push(link);
+            }).fail(() => {
+                console.log('获取链接失败');
+                link = '第 ' + (i + 1) + ' 张图出错;错误地址：' + url;
+                console.log(link);
+                links.push(link);
+            });
         }
+        console.log('links: ' + links);
         return links.length > 0 ? links.join('<br>\n') : '<h1>获取失败</h1>';
     }
 
