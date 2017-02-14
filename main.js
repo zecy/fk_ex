@@ -16,10 +16,15 @@ let main = () => {
 
     // 主要操作逻辑
     let mainTask = () => {
-        // 1. 获取链接
-        const text = getImgLinks();
-        // 2. 正文文字插入到一个 div 中，等待复制
-        setTextBox(text);
+
+        $.when(setTextBox(loading()))
+            .then(() => {
+                // 1. 获取链接
+                return getImgLinks();
+            }).then((r) => {
+                // 2. 正文文字插入到一个 div 中，等待复制
+                setTextBox(r);
+            })
     }
 
     // 设置按钮
