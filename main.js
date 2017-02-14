@@ -49,9 +49,9 @@ let main = () => {
     }
 
     // 获取链接
-    let getImgLinks = () => {
+    let getImages = () => {
 
-        const pageA = $('.gdtm').find('a');
+        const pageArchor = $('.gdtm').find('a');
 
         let links = [];
 
