@@ -57,6 +57,14 @@ let main = () => {
 
         for (let i = 0; i < pageA.length; i++) {
             let link;
+        //  http://{ip}:{port}/h/{hash}-{index}-{width}-{height}-{format}/
+        //  keystamp=1487076600-4cb29d1ed6;fileindex=51006747;xres=1280/001.jpg
+        const pat1 = /^.*(keystamp=\w+-\w+);fileindex.*\/(.*)\.(jpg|png)$/;
+
+        // http://{ip}:{port}/h/{hash}-{index}-{width}-{width}-{format}/
+        // keystamp=1487078400-4b8a74d97f/003.jpg
+        const pat2 = /^.*(keystamp=\w+-\w+)\/(.*)\.(jpg|png)/;
+
             $.ajax({
                 type: "GET",
                 url: pageA[i].href,
