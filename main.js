@@ -121,7 +121,7 @@ let main = () => {
                 background: #4f535b;
                 text-align: center;
                 box-sizing:border-box;
-                flex:0 0 600px;
+                flex:0 0 calc(50% - 6px);
             }
 
             #result-box > div:first-child {
