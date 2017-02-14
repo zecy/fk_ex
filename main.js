@@ -56,8 +56,6 @@ let main = () => {
         let links = [];
         let names = [];
 
-        for (let i = 0; i < pageA.length; i++) {
-            let link;
         //  http://{ip}:{port}/h/{hash}-{index}-{width}-{height}-{format}/
         //  keystamp=1487076600-4cb29d1ed6;fileindex=51006747;xres=1280/001.jpg
         const pat1 = /^.*(keystamp=\w+-\w+);fileindex.*\/(.*)\.(jpg|png)$/;
@@ -66,22 +64,34 @@ let main = () => {
         // keystamp=1487078400-4b8a74d97f/003.jpg
         const pat2 = /^.*(keystamp=\w+-\w+)\/(.*)\.(jpg|png)/;
 
+        pageArchor.map((index) => {
             $.ajax({
                 type: "GET",
                 url: pageArchor[index].href,
                 dataType: "html",
                 async: false
             }).done((data) => {
-                console.log('成功获取链接');
-                link = $(data).find('#img').attr('src');
-                console.log('link: ' + link);
+                const link = $(data).find('#img').attr('src');
+
+                let match = '';
+
+                if (pat1.test(link)) {
+                    match = pat1.exec(link);
+                } else if (pat2.test(link)) {
+                    match = pat2.exec(link);
+                }
+                //            keystamp        jpg | png          001              jpg
+                const name = match[1] + '.' + match[3] + ' ' + match[2] + '.' + match[3];
+
                 links.push(link);
+                names.push(name);
             }).fail(() => {
-                console.log('获取链接失败');
                 link = '第 ' + (i + 1) + ' 张图出错;错误地址：' + url;
-                console.log(link);
                 links.push(link);
-            });
+                names.push('获取失败');
+            })
+        });
+
         return {
             'links': links.length > 0 ? links.join('<br>\n') : '<h1>获取失败</h1>',
             'names': names.length > 0 ? names.join('<br>\n') : '<h1>获取失败</h1>'
