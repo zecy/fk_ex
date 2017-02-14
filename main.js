@@ -1,6 +1,9 @@
 let main = () => {
     // 启动按钮
     $(document).ready(function() {
+        // 设置统一样式
+        setStyle();
+
         // 在页面中插入一个执行按钮
         setBtn();
 
@@ -29,27 +32,7 @@ let main = () => {
         </tr>
         `;
 
-        const btnCss = {
-            borderRadius: "5px",
-            border: "1px solid #989898",
-            padding: "1px 4px",
-            cursor: "pointer",
-            color: "#ddd",
-            background: "transparent",
-            fontWeight: "700"
-        };
-
         $('#taglist').find('tbody').append(btnElm);
-
-        $('#list-btn').css(btnCss);
-
-        $('#list-btn').hover(function() {
-            // over
-            $(this).css('color', '#FFFBDB');
-        }, function() {
-            // out
-            $(this).css('color', '#ddd');
-        });
 
     }
 
@@ -83,21 +66,45 @@ let main = () => {
     // 设置文本框
     let setTextBox = (text) => {
         let box = document.createElement('div');
-        const boxCss = {
-            minWidth: '720px',
-            maxWidth: '1200px',
-            border: '1px solid #000',
-            padding: '5px',
-            background: '#4f535b',
-            textAlign: 'center',
-            margin: '0 auto 5px auto'
-        }
         box.setAttribute("contentEditable", true);
         box.id = "result-box";
-        $(box).css(boxCss);
         if (!document.getElementById('result-box')) {
             $('#gdt').before(box);
         }
         box.innerHTML = text;
+    }
+
+    const setStyle = () => {
+        let style = document.createElement('style');
+
+        const css = `
+            #list-btn {
+                border-radius: 5px;
+                border: 1px solid #989898;
+                padding: 1px 4px;
+                cursor: pointer;
+                color: #ddd;
+                background: transparent;
+                font-weight: 700
+            }
+
+            #list-btn:hover {
+                color: #FFFBDB;
+            }
+            
+            #result-box {
+                min-width: 720px;
+                max-width: 1200px;
+                border: 1px solid #000;
+                padding: 5px;
+                background: #4f535b;
+                text-align: center;
+                margin: 0 auto 5px auto
+            }
+        `;
+
+        style.innerHTML = css;
+
+        document.body.appendChild(style);
     }
 }
