@@ -68,7 +68,7 @@ let main = () => {
 
             $.ajax({
                 type: "GET",
-                url: pageA[i].href,
+                url: pageArchor[index].href,
                 dataType: "html",
                 async: false
             }).done((data) => {
