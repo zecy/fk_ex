@@ -61,7 +61,7 @@ let main = () => {
                 type: "GET",
                 url: pageA[i].href,
                 dataType: "html",
-                async: true,
+                async: false
             }).done((data) => {
                 console.log('成功获取链接');
                 link = $(data).find('#img').attr('src');
