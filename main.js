@@ -71,13 +71,13 @@ let main = () => {
 
     // 设置文本框
     let setTextBox = (text) => {
-        let box = document.createElement('div');
-        box.setAttribute("contentEditable", true);
-        box.id = "result-box";
         if (!document.getElementById('result-box')) {
+            let box = document.createElement('div');
+            box.setAttribute("contentEditable", true);
+            box.id = "result-box";
             $('#gdt').before(box);
         }
-        box.innerHTML = text;
+        $('#result-box').html(text);
     }
 
     const setStyle = () => {
