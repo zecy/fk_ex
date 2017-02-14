@@ -54,6 +54,7 @@ let main = () => {
         const pageArchor = $('.gdtm').find('a');
 
         let links = [];
+        let names = [];
 
         for (let i = 0; i < pageA.length; i++) {
             let link;
