@@ -278,7 +278,7 @@ let main = () => {
     const loading = () => {
         // source: http://tobiasahlin.com/spinkit/
         const html = `
-        <div class="sk-fading-circle">
+        <div id="ex-loading" class="sk-fading-circle">
             <div class="sk-circle1 sk-circle"></div>
             <div class="sk-circle2 sk-circle"></div>
             <div class="sk-circle3 sk-circle"></div>
@@ -295,5 +295,13 @@ let main = () => {
         `;
 
         return html;
+    }
+
+    const setLoading = () => {
+        $('#gdt').before(loading())
+    }
+
+    const removeLoading = () => {
+        $('#ex-loading').remove()
     }
 }
