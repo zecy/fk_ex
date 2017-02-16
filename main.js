@@ -64,6 +64,10 @@ let main = () => {
         // keystamp=1487078400-4b8a74d97f/003.jpg
         const pat2 = /^.*(keystamp=\w+-\w+)\/(.*)\.(jpg|png)/;
 
+        // http://{ip}/lid/{index}/{hash}-{index}-{width}-{height}-{format}/
+        // c1cc00a72d0bdd21776ffe30bff8cd64c7b504bc-559126-1111-1600-jpg/2400/uu51rws8urs/172.jpg
+        const pat3 = /^.*\/lid\/.*\/(\d+)\.(jpg|png)/;
+
         pageArchor.map((index) => {
             $.ajax({
                 type: "GET",
@@ -74,14 +78,21 @@ let main = () => {
                 const link = $(data).find('#img').attr('src');
 
                 let match = '';
+                let name = '';
 
                 if (pat1.test(link)) {
                     match = pat1.exec(link);
+                    //     keystamp        jpg | png          001              jpg
+                    name = match[1] + '.' + match[3] + ' ' + match[2] + '.' + match[3];
                 } else if (pat2.test(link)) {
                     match = pat2.exec(link);
+                    //       001           jpg | png          001              jpg
+                    name = match[2] + '.' + match[3] + ' ' + match[2] + '.' + match[3];
+                } else if (pat3.test(link)) {
+                    match = pat3.exec(link);
+                    //      172           jpg | png          172              jpg
+                    name = match[1] + '.' + match[3] + ' ' + match[2] + '.' + match[3];
                 }
-                //            keystamp        jpg | png          001              jpg
-                const name = match[1] + '.' + match[3] + ' ' + match[2] + '.' + match[3];
 
                 links.push(link);
                 names.push(name);
