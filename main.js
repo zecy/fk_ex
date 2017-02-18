@@ -58,15 +58,15 @@ let main = () => {
 
         //  http://{ip}:{port}/h/{hash}-{index}-{width}-{height}-{format}/
         //  keystamp=1487076600-4cb29d1ed6;fileindex=51006747;xres=1280/001.jpg
-        const pat1 = /^.*(keystamp=\w+-\w+);fileindex.*\/(.*)\.(jpg|png)$/;
+        const pat1 = /^.*(keystamp=\w+-\w+);fileindex.*\/(.*?)\.(jpg|png)$/;
 
         // http://{ip}:{port}/h/{hash}-{index}-{width}-{width}-{format}/
         // keystamp=1487078400-4b8a74d97f/003.jpg
-        const pat2 = /^.*(keystamp=\w+-\w+)\/(.*)\.(jpg|png)/;
+        const pat2 = /^.*(keystamp=\w+-\w+)\/(.*?)\.(jpg|png)/;
 
-        // http://{ip}/lid/{index}/{hash}-{index}-{width}-{height}-{format}/
+        // http://{ip}/lid|im|h/{index}/{hash}-{index}-{width}-{height}-{format}/
         // c1cc00a72d0bdd21776ffe30bff8cd64c7b504bc-559126-1111-1600-jpg/2400/uu51rws8urs/172.jpg
-        const pat3 = /^.*\/lid\/.*\/(\d+)\.(jpg|png)/;
+        const pat3 = /^.*\/(?:lid|im|h)\/.*\/(.*?)\.(jpg|png)/;
 
         pageArchor.map((index) => {
             $.ajax({
@@ -91,7 +91,7 @@ let main = () => {
                 } else if (pat3.test(link)) {
                     match = pat3.exec(link);
                     //      172           jpg | png          172              jpg
-                    name = match[1] + '.' + match[3] + ' ' + match[2] + '.' + match[3];
+                    name = match[1] + '.' + match[2] + ' ' + match[1] + '.' + match[2];
                 }
 
                 links.push(link);
