@@ -15,12 +15,12 @@ let main = () => {
 
     // 主要操作逻辑
     let mainTask = () => {
-
-        $.when(setLoading('1', $(".ptt tr td a").length))
+        $.when(setLoading())
             .then(() => {
-                getPages();
+                return getPages();
             })
-            .done(() => {
+            .done((data) => {
+                setTextBox(data.links, data.names)
                 removeLoading();
             })
     }
@@ -61,21 +61,29 @@ let main = () => {
                 async: false
             }).done((data) => {
                 const imageActors = Array.from($(data).find(".gdtm a"));
-                let imgLinks = imageActors.map((a) => {
+                let imgPages = imageActors.map((a) => {
                     return a.href
                 })
 
-                const imageInfo = getImages(imgLinks);
+                const imageInfo = getImages(imgPages);
 
-                imgLinks = imgLinks + imageInfo.links;
-                imgNames = imgNames + imageInfo.names;
-
-                setTextBox(imgLinks, imgNames);
+                if (imgLinks == "") {
+                    imgLinks = imageInfo.links;
+                    imgNames = imageInfo.names;
+                } else {
+                    imgLinks = imgLinks + "<br>\n" + imageInfo.links;
+                    imgNames = imgNames + "<br>\n" + imageInfo.names;
+                }
 
             }).fail((err) => {
                 console.log(err)
             })
         })
+
+        return {
+            'links': imgLinks,
+            'names': imgNames
+        }
 
     }
 
@@ -211,23 +219,6 @@ let main = () => {
 
             #result-box > div:first-child {
                 margin-right: 12px;
-            }
-
-            #ex-loading {
-                text-align:center;
-                width: 250px;
-                align-items: center;
-                text-align: center;
-                display: flex;
-                margin: 40px auto;
-            }
-
-            #ex-loading > div, #ex-loading > h2 {
-                margin: 0
-            }
-
-            #ex-loading > h2 {
-                margin-left: 40px
             }
 
             /* loading animation */
@@ -377,37 +368,30 @@ let main = () => {
         document.body.appendChild(style);
     }
 
-    const loading = (now, all) => {
+    const loading = () => {
         // source: http://tobiasahlin.com/spinkit/
         const html = `
-        <div id="ex-loading">
-            <div class="sk-fading-circle">
-                <div class="sk-circle1 sk-circle"></div>
-                <div class="sk-circle2 sk-circle"></div>
-                <div class="sk-circle3 sk-circle"></div>
-                <div class="sk-circle4 sk-circle"></div>
-                <div class="sk-circle5 sk-circle"></div>
-                <div class="sk-circle6 sk-circle"></div>
-                <div class="sk-circle7 sk-circle"></div>
-                <div class="sk-circle8 sk-circle"></div>
-                <div class="sk-circle9 sk-circle"></div>
-                <div class="sk-circle10 sk-circle"></div>
-                <div class="sk-circle11 sk-circle"></div>
-                <div class="sk-circle12 sk-circle"></div>
-            </div>
-            <h2>正在解释第 ` + now + " / " + all + ` 页</h2>
+        <div id="ex-loading" class="sk-fading-circle">
+            <div class="sk-circle1 sk-circle"></div>
+            <div class="sk-circle2 sk-circle"></div>
+            <div class="sk-circle3 sk-circle"></div>
+            <div class="sk-circle4 sk-circle"></div>
+            <div class="sk-circle5 sk-circle"></div>
+            <div class="sk-circle6 sk-circle"></div>
+            <div class="sk-circle7 sk-circle"></div>
+            <div class="sk-circle8 sk-circle"></div>
+            <div class="sk-circle9 sk-circle"></div>
+            <div class="sk-circle10 sk-circle"></div>
+            <div class="sk-circle11 sk-circle"></div>
+            <div class="sk-circle12 sk-circle"></div>
         </div>
         `;
 
         return html;
     }
 
-    const setLoading = (now, all) => {
-        if (!document.getElementById('ex-loading')) {
-            $('#gdt').before(loading(now, all))
-        } else {
-            $('#ex-loading').replaceWith(loading(now, all))
-        }
+    const setLoading = () => {
+        $('#gdt').before(loading())
     }
 
     const removeLoading = () => {
