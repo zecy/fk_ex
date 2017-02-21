@@ -9,7 +9,8 @@ let main = () => {
 
         // 点击按钮执行操作
         $('#list-btn').click(function() {
-            mainTask();
+            // mainTask();
+            getPages();
         });
     });
 
@@ -48,10 +49,41 @@ let main = () => {
 
     }
 
-    // 获取链接
-    let getImages = () => {
+    // 获取页面连接
+    let getPages = () => {
 
-        const pageArchor = $('.gdtm').find('a');
+        const pageActors = Array.from($(".ptt tr td a"))
+
+        let pageLinks = pageActors.map((index) => {
+            console.log(pageActors[index])
+            return pageActors[index].href;
+        })
+
+        pageLinks = new Set(pageLinks);
+
+        pageLinks.map((index) => {
+            $.ajax({
+                type: "GET",
+                url: pageLinks[index],
+                dataType: "html",
+                async: false
+            }).done((data) => {
+                const imageActors = $(data).find(".gdtm a");
+                let imgLinks = imageActors.reduce((index) => {
+                    return imageActors[index].href
+                })
+                console.log(imageActors);
+            }).fail((err) => {
+                console.log(err)
+            })
+        })
+
+    }
+
+    // 获取图片链接
+    let getImages = (linkList) => {
+
+        const imgLinks = linkList
 
         let links = [];
         let names = [];
@@ -68,10 +100,10 @@ let main = () => {
         // c1cc00a72d0bdd21776ffe30bff8cd64c7b504bc-559126-1111-1600-jpg/2400/uu51rws8urs/172.jpg
         const pat3 = /^.*\/(?:lid|im|h)\/.*\/(.*?)\.(jpg|png)/;
 
-        pageArchor.map((index) => {
+        imgLinks.map((index) => {
             $.ajax({
                 type: "GET",
-                url: pageArchor[index].href,
+                url: imgLinks[index].href,
                 dataType: "html",
                 async: false
             }).done((data) => {
