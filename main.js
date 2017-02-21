@@ -9,29 +9,19 @@ let main = () => {
 
         // 点击按钮执行操作
         $('#list-btn').click(function() {
-            // mainTask();
-            getPages();
+            mainTask();
         });
     });
 
     // 主要操作逻辑
     let mainTask = () => {
 
-        $.when(setLoading())
+        $.when(setLoading('1', $(".ptt tr td a").length))
             .then(() => {
-                // 1. 获取链接和名字
-                /**
-                 * {
-                 *     'links': links,
-                 *     'names': names
-                 * }
-                 */
-                return getImages();
+                getPages();
             })
-            .done((imgs) => {
-                // 2. 正文文字插入到一个 div 中，等待复制
+            .done(() => {
                 removeLoading();
-                setTextBox(imgs.links, imgs.names);
             })
     }
 
@@ -54,25 +44,34 @@ let main = () => {
 
         const pageActors = Array.from($(".ptt tr td a"))
 
-        let pageLinks = pageActors.map((index) => {
-            console.log(pageActors[index])
-            return pageActors[index].href;
+        let pageLinks = pageActors.map((a) => {
+            return a.href;
         })
 
-        pageLinks = new Set(pageLinks);
+        pageLinks = Array.from(new Set(pageLinks));
 
-        pageLinks.map((index) => {
+        let imgLinks = "";
+        let imgNames = "";
+
+        pageLinks.map((link) => {
             $.ajax({
                 type: "GET",
-                url: pageLinks[index],
+                url: link,
                 dataType: "html",
                 async: false
             }).done((data) => {
-                const imageActors = $(data).find(".gdtm a");
-                let imgLinks = imageActors.reduce((index) => {
-                    return imageActors[index].href
+                const imageActors = Array.from($(data).find(".gdtm a"));
+                let imgLinks = imageActors.map((a) => {
+                    return a.href
                 })
-                console.log(imageActors);
+
+                const imageInfo = getImages(imgLinks);
+
+                imgLinks = imgLinks + imageInfo.links;
+                imgNames = imgNames + imageInfo.names;
+
+                setTextBox(imgLinks, imgNames);
+
             }).fail((err) => {
                 console.log(err)
             })
@@ -100,10 +99,10 @@ let main = () => {
         // c1cc00a72d0bdd21776ffe30bff8cd64c7b504bc-559126-1111-1600-jpg/2400/uu51rws8urs/172.jpg
         const pat3 = /^.*\/(?:lid|im|h)\/.*\/(.*?)\.(jpg|png)/;
 
-        imgLinks.map((index) => {
+        imgLinks.map((link) => {
             $.ajax({
                 type: "GET",
-                url: imgLinks[index].href,
+                url: link,
                 dataType: "html",
                 async: false
             }).done((data) => {
@@ -212,6 +211,23 @@ let main = () => {
 
             #result-box > div:first-child {
                 margin-right: 12px;
+            }
+
+            #ex-loading {
+                text-align:center;
+                width: 250px;
+                align-items: center;
+                text-align: center;
+                display: flex;
+                margin: 40px auto;
+            }
+
+            #ex-loading > div, #ex-loading > h2 {
+                margin: 0
+            }
+
+            #ex-loading > h2 {
+                margin-left: 40px
             }
 
             /* loading animation */
@@ -361,30 +377,37 @@ let main = () => {
         document.body.appendChild(style);
     }
 
-    const loading = () => {
+    const loading = (now, all) => {
         // source: http://tobiasahlin.com/spinkit/
         const html = `
-        <div id="ex-loading" class="sk-fading-circle">
-            <div class="sk-circle1 sk-circle"></div>
-            <div class="sk-circle2 sk-circle"></div>
-            <div class="sk-circle3 sk-circle"></div>
-            <div class="sk-circle4 sk-circle"></div>
-            <div class="sk-circle5 sk-circle"></div>
-            <div class="sk-circle6 sk-circle"></div>
-            <div class="sk-circle7 sk-circle"></div>
-            <div class="sk-circle8 sk-circle"></div>
-            <div class="sk-circle9 sk-circle"></div>
-            <div class="sk-circle10 sk-circle"></div>
-            <div class="sk-circle11 sk-circle"></div>
-            <div class="sk-circle12 sk-circle"></div>
+        <div id="ex-loading">
+            <div class="sk-fading-circle">
+                <div class="sk-circle1 sk-circle"></div>
+                <div class="sk-circle2 sk-circle"></div>
+                <div class="sk-circle3 sk-circle"></div>
+                <div class="sk-circle4 sk-circle"></div>
+                <div class="sk-circle5 sk-circle"></div>
+                <div class="sk-circle6 sk-circle"></div>
+                <div class="sk-circle7 sk-circle"></div>
+                <div class="sk-circle8 sk-circle"></div>
+                <div class="sk-circle9 sk-circle"></div>
+                <div class="sk-circle10 sk-circle"></div>
+                <div class="sk-circle11 sk-circle"></div>
+                <div class="sk-circle12 sk-circle"></div>
+            </div>
+            <h2>正在解释第 ` + now + " / " + all + ` 页</h2>
         </div>
         `;
 
         return html;
     }
 
-    const setLoading = () => {
-        $('#gdt').before(loading())
+    const setLoading = (now, all) => {
+        if (!document.getElementById('ex-loading')) {
+            $('#gdt').before(loading(now, all))
+        } else {
+            $('#ex-loading').replaceWith(loading(now, all))
+        }
     }
 
     const removeLoading = () => {
