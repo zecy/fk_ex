@@ -67,8 +67,8 @@ let main = () => {
 
                 const imageInfo = getImages(imgPages);
 
-                imgLinks.concat(imageInfo.links);
-                imgNames.concat(imageInfo.names);
+                imgLinks = imgLinks.concat(imageInfo.links);
+                imgNames = imgNames.concat(imageInfo.names);
 
             }).fail((err) => {
                 console.log(err)
