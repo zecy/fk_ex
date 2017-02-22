@@ -50,8 +50,8 @@ let main = () => {
 
         pageLinks = Array.from(new Set(pageLinks));
 
-        let imgLinks = "";
-        let imgNames = "";
+        let imgLinks = [];
+        let imgNames = [];
 
         pageLinks.map((link) => {
             $.ajax({
@@ -67,13 +67,8 @@ let main = () => {
 
                 const imageInfo = getImages(imgPages);
 
-                if (imgLinks == "") {
-                    imgLinks = imageInfo.links;
-                    imgNames = imageInfo.names;
-                } else {
-                    imgLinks = imgLinks + "<br>\n" + imageInfo.links;
-                    imgNames = imgNames + "<br>\n" + imageInfo.names;
-                }
+                imgLinks.concat(imageInfo.links);
+                imgNames.concat(imageInfo.names);
 
             }).fail((err) => {
                 console.log(err)
@@ -81,8 +76,8 @@ let main = () => {
         })
 
         return {
-            'links': imgLinks,
-            'names': imgNames
+            'links': imgLinks.join("<br>\n"),
+            'names': imgNames.join("<br>\n")
         }
 
     }
@@ -143,8 +138,8 @@ let main = () => {
         });
 
         return {
-            'links': links.length > 0 ? links.join('<br>\n') : '<h1>获取失败</h1>',
-            'names': names.length > 0 ? names.join('<br>\n') : '<h1>获取失败</h1>'
+            'links': links.length > 0 ? links : ['<h1>获取失败</h1>'],
+            'names': names.length > 0 ? names : ['<h1>获取失败</h1>']
         }
     }
 
